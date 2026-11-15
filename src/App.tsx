@@ -1,9 +1,12 @@
+
 import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+
 import TopBar from "./components/TopBar";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Toaster from "./components/Toaster";
+
 import Home from "./pages/Home";
 import Shop from "./pages/Shop";
 import ProductDetail from "./pages/ProductDetail";
@@ -13,14 +16,18 @@ import Account from "./pages/Account";
 import Wishlist from "./pages/Wishlist";
 import Magazine from "./pages/Magazine";
 import Contact from "./pages/Contact";
+
 import { I18nProvider } from "./i18n";
+import { CatalogProvider } from "./CatalogContext";
 import { StoreProvider } from "./store";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
   }, [pathname]);
+
   return null;
 }
 
@@ -29,7 +36,9 @@ function Shell() {
     <div className="min-h-screen flex flex-col bg-cream">
       <TopBar />
       <Header />
+
       <ScrollToTop />
+
       <main className="flex-1 pb-6">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -45,6 +54,7 @@ function Shell() {
           <Route path="*" element={<Home />} />
         </Routes>
       </main>
+
       <Footer />
       <Toaster />
     </div>
@@ -54,11 +64,13 @@ function Shell() {
 export default function App() {
   return (
     <I18nProvider>
-      <StoreProvider>
-        <HashRouter>
-          <Shell />
-        </HashRouter>
-      </StoreProvider>
+      <CatalogProvider>
+        <StoreProvider>
+          <HashRouter>
+            <Shell />
+          </HashRouter>
+        </StoreProvider>
+      </CatalogProvider>
     </I18nProvider>
   );
 }
