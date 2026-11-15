@@ -1,4 +1,3 @@
-
 import { HashRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -19,6 +18,7 @@ import Contact from "./pages/Contact";
 
 import { I18nProvider } from "./i18n";
 import { CatalogProvider } from "./CatalogContext";
+import { CartProvider } from "./CartContext";
 import { StoreProvider } from "./store";
 
 function ScrollToTop() {
@@ -65,11 +65,13 @@ export default function App() {
   return (
     <I18nProvider>
       <CatalogProvider>
-        <StoreProvider>
-          <HashRouter>
-            <Shell />
-          </HashRouter>
-        </StoreProvider>
+        <CartProvider>
+          <StoreProvider>
+            <HashRouter>
+              <Shell />
+            </HashRouter>
+          </StoreProvider>
+        </CartProvider>
       </CatalogProvider>
     </I18nProvider>
   );
