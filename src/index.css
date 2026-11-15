@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Vazirmatn", "Cormorant Garamond", "Yekan Bakh", system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", "Vazirmatn", serif;
+
+  /* Burgundy luxury palette */
+  --color-brand-50:  #fbf3f6;
+  --color-brand-100: #f3dde5;
+  --color-brand-200: #e6b9c8;
+  --color-brand-300: #c98aa3;
+  --color-brand-400: #a3556f;
+  --color-brand-500: #7a1f3d;
+  --color-brand-600: #5a1530;
+  --color-brand-700: #3d0e20;
+  --color-brand-800: #260714;
+
+  --color-ink-900: #1a1618;
+  --color-ink-700: #3b3238;
+  --color-ink-500: #6b5f66;
+  --color-ink-300: #a9a0a5;
+  --color-ink-100: #ece6e9;
+
+  --color-cream: #fbf7f3;
+  --color-sand:  #f3ece4;
+}
+
+html, body, #root {
+  background: var(--color-cream);
+  color: var(--color-ink-900);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.fa-nums { font-variant-numeric: tabular-nums; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(50%); }
+}
+.marquee-track { animation: marquee 40s linear infinite; }
+
+@keyframes float-slow {
+  0%,100% { transform: translateY(0) }
+  50% { transform: translateY(-8px) }
+}
+.float-slow { animation: float-slow 6s ease-in-out infinite; }
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(8px) }
+  to   { opacity: 1; transform: translateY(0) }
+}
+.fade-up { animation: fade-up .35s ease-out both; }
+
+/* toast */
+.toast-enter { animation: fade-up .25s ease-out both; }
