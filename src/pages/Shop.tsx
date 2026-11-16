@@ -311,7 +311,7 @@ export default function Shop() {
                 {filtered.slice(0, visible).map((product) => (
                   <div
                     key={product.id}
-                    className="[&>article]:!w-full [&>article]:!min-w-0"
+                    className="[&>article]:w-full! [&>article]:min-w-0!"
                   >
                     <CatalogProductCard product={product} />
                   </div>

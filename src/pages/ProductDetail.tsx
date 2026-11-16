@@ -426,7 +426,7 @@ export default function ProductDetail() {
 
           <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
             {related.map((item) => (
-              <div key={item.id} className="min-w-[210px]">
+              <div key={item.id} className="min-w-52.5">
                 <CatalogProductCard product={item} />
               </div>
             ))}

@@ -52,15 +52,15 @@ export default function CatalogProductCard({ product }: Props) {
     : undefined;
 
   return (
-    <article className="group relative bg-white rounded-2xl border border-ink-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/40 transition-all overflow-hidden flex flex-col min-w-[210px] w-[210px]">
+    <article className="group relative bg-white rounded-2xl border border-ink-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/40 transition-all overflow-hidden flex flex-col min-w-52.5 w-52.5">
       {badgeLabel && (
-        <span className="absolute top-3 start-3 z-10 bg-ink-900 text-white text-[10px] px-2 py-1 rounded-full font-semibold">
+        <span className="absolute top-3 inset-s-3 z-10 bg-ink-900 text-white text-[10px] px-2 py-1 rounded-full font-semibold">
           {badgeLabel}
         </span>
       )}
 
       {discount > 0 && (
-        <span className="absolute top-3 end-3 z-10 bg-brand-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+        <span className="absolute top-3 inset-e-3 z-10 bg-brand-500 text-white text-xs px-2 py-1 rounded-full font-bold">
           {formatAmount(discount, lang)}% {t("action.off")}
         </span>
       )}
@@ -90,7 +90,7 @@ export default function CatalogProductCard({ product }: Props) {
 
         <Link
           to={`/product/${product.id}`}
-          className="text-[13px] text-ink-900 font-semibold leading-snug line-clamp-2 min-h-[36px] hover:text-brand-600"
+          className="text-[13px] text-ink-900 font-semibold leading-snug line-clamp-2 min-h-9 hover:text-brand-600"
         >
           {translation.title}
         </Link>

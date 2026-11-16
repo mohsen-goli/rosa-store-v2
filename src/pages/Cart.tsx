@@ -97,7 +97,7 @@ export default function Cart() {
 
         <Link
           to="/shop"
-          className="inline-block mt-5 bg-brand-500 hover:bg-brand-600 text-white px-6 h-11 rounded-full font-bold leading-[2.75rem]"
+          className="inline-block mt-5 bg-brand-500 hover:bg-brand-600 text-white px-6 h-11 rounded-full font-bold leading-11"
         >
           {t("cart.emptyCta")}
         </Link>

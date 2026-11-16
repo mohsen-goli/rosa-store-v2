@@ -17,11 +17,11 @@ export default function Articles() {
       <div className="grid md:grid-cols-3 gap-4">
         {list.map(a => (
           <a key={a.id} href="#" className="group bg-white rounded-2xl overflow-hidden border border-ink-100 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/40 transition">
-            <div className="aspect-[4/3] overflow-hidden">
+            <div className="aspect-4/3 overflow-hidden">
               <img src={a.image} alt={a.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
             </div>
             <div className="p-5 space-y-3">
-              <h3 className="font-bold text-ink-900 leading-snug line-clamp-2 min-h-[48px] group-hover:text-brand-600 transition">{a.title}</h3>
+              <h3 className="font-bold text-ink-900 leading-snug line-clamp-2 min-h-12 group-hover:text-brand-600 transition">{a.title}</h3>
               <p className="text-[12px] text-ink-500 leading-relaxed line-clamp-2">{a.excerpt}</p>
               <div className="flex items-center justify-between text-[11px] text-ink-500 pt-2 border-t border-dashed border-ink-100">
                 <span className="flex items-center gap-1"><UserCircle2 className="w-3.5 h-3.5" /> {a.author}</span>

@@ -68,7 +68,7 @@ export default function Wishlist() {
                       ? "إزالة من المفضلة"
                       : "Remove from wishlist"
                 }
-                className="absolute top-12 end-3 z-20 w-9 h-9 rounded-full bg-white/95 border border-ink-100 shadow-sm grid place-items-center hover:bg-brand-50 transition"
+                className="absolute top-12 inset-e-3 z-20 w-9 h-9 rounded-full bg-white/95 border border-ink-100 shadow-sm grid place-items-center hover:bg-brand-50 transition"
               >
                 <Heart className="w-4 h-4 fill-brand-500 text-brand-500" />
               </button>

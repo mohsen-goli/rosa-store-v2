@@ -72,7 +72,7 @@ export default function Header() {
 
         <form onSubmit={onSearch} className="flex-1 max-w-2xl hidden md:block">
           <div className="relative">
-            <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500" />
+            <Search className="absolute inset-s-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500" />
 
             <input
               value={q}
@@ -112,7 +112,7 @@ export default function Header() {
             <Heart className="w-4 h-4 text-ink-700" />
 
             {wishlist.length > 0 && (
-              <span className="absolute -top-0.5 -end-0.5 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-500 text-white text-[10px] grid place-items-center">
+              <span className="absolute -top-0.5 -inset-e-0.5 min-w-4.5 h-4.5 px-1 rounded-full bg-brand-500 text-white text-[10px] grid place-items-center">
                 {localizeDigits(wishlist.length, lang)}
               </span>
             )}
@@ -134,7 +134,7 @@ export default function Header() {
       {/* Mobile search */}
       <form onSubmit={onSearch} className="md:hidden px-4 pb-3">
         <div className="relative">
-          <Search className="absolute start-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500" />
+          <Search className="absolute inset-s-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ink-500" />
 
           <input
             value={q}

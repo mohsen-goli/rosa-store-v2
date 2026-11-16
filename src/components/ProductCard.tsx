@@ -13,19 +13,19 @@ export default function ProductCard({ p }: { p: Product }) {
   const outOfStock = p.stock <= 0
 
   return (
-    <div className="group relative bg-white rounded-2xl border border-ink-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/40 transition-all overflow-hidden flex flex-col min-w-[210px] w-[210px]">
+    <div className="group relative bg-white rounded-2xl border border-ink-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/40 transition-all overflow-hidden flex flex-col min-w-52.5 w-52.5">
       {p.badge && (
-        <span className="absolute top-3 start-3 z-10 bg-ink-900 text-white text-[10px] px-2 py-1 rounded-full font-semibold capitalize">{p.badge}</span>
+        <span className="absolute top-3 inset-s-3 z-10 bg-ink-900 text-white text-[10px] px-2 py-1 rounded-full font-semibold capitalize">{p.badge}</span>
       )}
       {p.discount && (
-        <span className="absolute top-3 end-3 z-10 bg-brand-500 text-white text-xs px-2 py-1 rounded-full font-bold">
+        <span className="absolute top-3 inset-e-3 z-10 bg-brand-500 text-white text-xs px-2 py-1 rounded-full font-bold">
           {localizeDigits(p.discount, lang)}% {t('action.off')}
         </span>
       )}
 
       <button
         onClick={() => toggleWish(p.id)}
-        className={`absolute top-12 end-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur border border-ink-100 grid place-items-center transition ${wished ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
+        className={`absolute top-12 inset-e-3 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur border border-ink-100 grid place-items-center transition ${wished ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}
         aria-label="wishlist"
       >
         <Heart className={`w-4 h-4 ${wished ? 'fill-brand-500 text-brand-500' : 'text-ink-700'}`} />
@@ -37,7 +37,7 @@ export default function ProductCard({ p }: { p: Product }) {
 
       <div className="p-3.5 flex-1 flex flex-col gap-2">
         <div className="text-[11px] text-brand-600 font-semibold">{p.brand}</div>
-        <Link to={`/product/${p.id}`} className="text-[13px] text-ink-900 font-semibold leading-snug line-clamp-2 min-h-[36px] hover:text-brand-600">
+        <Link to={`/product/${p.id}`} className="text-[13px] text-ink-900 font-semibold leading-snug line-clamp-2 min-h-9 hover:text-brand-600">
           {p.title[lang]}
         </Link>
         <div className="flex items-center gap-1 text-[11px] text-ink-500">
