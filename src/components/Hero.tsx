@@ -1,83 +1,240 @@
-import { useEffect, useState } from 'react'
-import { ArrowLeft, ArrowRight } from 'lucide-react'
-import { useNavigate } from 'react-router-dom'
-import { useI18n } from '../i18n'
+import { useEffect, useState } from "react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useI18n } from "../i18n";
 
 const slides = [
   {
-    tagKey: 'home.hero.tag',
-    titleKey: 'home.hero.title',
-    descKey: 'home.hero.desc',
-    ctaKey: 'home.hero.cta',
-    image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=1400&q=80',
-    link: '/shop',
-    bg: 'from-brand-600 via-brand-700 to-brand-800',
+    id: "beauty",
+    image:
+      "https://rilwptahhvipusiwfjks.supabase.co/storage/v1/object/public/banners/rosa-hero-beauty.webp",
+    link: "/shop",
+    text: {
+      en: {
+        tag: "THE WORLD OF ROSA",
+        title: "Beauty Is Your Signature.",
+        desc: "Express your beauty. Celebrate your individuality.",
+        cta: "DISCOVER BEAUTY",
+      },
+      fa: {
+        tag: "دنیای زیبایی رزا",
+        title: "زیبایی، امضای توست.",
+        desc: "زیبایی منحصربه‌فرد خودت را کشف کن و بدرخش.",
+        cta: "کشف دنیای زیبایی",
+      },
+      ar: {
+        tag: "عالم ROSA",
+        title: "جمالكِ هو توقيعك.",
+        desc: "عبّري عن جمالك واحتفي بتفرّدك.",
+        cta: "اكتشفي الجمال",
+      },
+    },
   },
   {
-    tagKey: 'nav.perfume',
-    titleKey: 'home.storyTitle',
-    descKey: 'home.storyDesc',
-    ctaKey: 'home.storyCta',
-    image: 'https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=1400&q=80',
-    link: '/shop/perfume',
-    bg: 'from-brand-700 via-brand-800 to-black',
+    id: "fragrance",
+    image:
+      "https://rilwptahhvipusiwfjks.supabase.co/storage/v1/object/public/banners/rosa-hero-fragrance.webp",
+    link: "/shop/perfume",
+    text: {
+      en: {
+        tag: "A SCENT TO REMEMBER",
+        title: "Make Every Moment Memorable.",
+        desc: "Find the fragrance that tells your story.",
+        cta: "EXPLORE FRAGRANCES",
+      },
+      fa: {
+        tag: "رایحه‌ای فراموش‌نشدنی",
+        title: "هر لحظه را ماندگار کن.",
+        desc: "رایحه‌ای پیدا کن که داستان تو را روایت کند.",
+        cta: "کشف عطرها",
+      },
+      ar: {
+        tag: "عطر لا يُنسى",
+        title: "اجعلي كل لحظة مميزة.",
+        desc: "اكتشفي العطر الذي يروي قصتك.",
+        cta: "اكتشفي العطور",
+      },
+    },
   },
   {
-    tagKey: 'nav.makeup',
-    titleKey: 'home.bestTitle',
-    descKey: 'home.bestSub',
-    ctaKey: 'action.viewAll',
-    image: 'https://images.unsplash.com/photo-1512207128146-4a7f44b65e44?auto=format&fit=crop&w=1400&q=80',
-    link: '/shop/makeup',
-    bg: 'from-brand-500 via-brand-600 to-brand-800',
+    id: "makeup",
+    image:
+      "https://rilwptahhvipusiwfjks.supabase.co/storage/v1/object/public/banners/rosa-hero-makeup.webp",
+    link: "/shop/makeup",
+    text: {
+      en: {
+        tag: "EXPRESS YOURSELF",
+        title: "Unveil Your Beauty.",
+        desc: "Everything you need to express your own style.",
+        cta: "EXPLORE MAKEUP",
+      },
+      fa: {
+        tag: "سبک خودت را بساز",
+        title: "زیبایی خودت را آشکار کن.",
+        desc: "هر آنچه برای خلق استایل منحصربه‌فردت نیاز داری.",
+        cta: "کشف محصولات آرایشی",
+      },
+      ar: {
+        tag: "عبّري عن نفسك",
+        title: "أبرزي جمالك.",
+        desc: "كل ما تحتاجينه للتعبير عن أسلوبك الخاص.",
+        cta: "اكتشفي المكياج",
+      },
+    },
   },
-]
+  {
+    id: "skincare",
+    image:
+      "https://rilwptahhvipusiwfjks.supabase.co/storage/v1/object/public/banners/rosa-hero-skincare.webp",
+    link: "/shop/skincare",
+    text: {
+      en: {
+        tag: "LOVE YOUR SKIN",
+        title: "Your Skin, Our Passion.",
+        desc: "Discover skincare that makes every day feel special.",
+        cta: "EXPLORE SKINCARE",
+      },
+      fa: {
+        tag: "عاشق پوستت باش",
+        title: "مراقبت از پوست، هنر ماست.",
+        desc: "با محصولات مراقبتی، هر روز به پوستت بیشتر اهمیت بده.",
+        cta: "کشف محصولات پوستی",
+      },
+      ar: {
+        tag: "أحبي بشرتك",
+        title: "العناية ببشرتك شغفنا.",
+        desc: "اكتشفي منتجات العناية التي تجعل كل يوم مميزاً.",
+        cta: "اكتشفي العناية بالبشرة",
+      },
+    },
+  },
+];
 
 export default function Hero() {
-  const { t, dir } = useI18n()
-  const nav = useNavigate()
-  const [i, setI] = useState(0)
+  const { dir, lang } = useI18n();
+  const nav = useNavigate();
+  const [i, setI] = useState(0);
+
+  const isRTL = dir === "rtl";
+  const currentSlide = slides[i];
+  const copy =
+    currentSlide.text[lang as keyof typeof currentSlide.text] ??
+    currentSlide.text.en;
+
+  const next = () => setI((current) => (current + 1) % slides.length);
+  const previous = () =>
+    setI((current) => (current - 1 + slides.length) % slides.length);
+
   useEffect(() => {
-    const tm = setInterval(() => setI(v => (v + 1) % slides.length), 7000)
-    return () => clearInterval(tm)
-  }, [])
-  const s = slides[i]
-  const Arrow = dir === 'rtl' ? ArrowLeft : ArrowRight
+    const timer = window.setInterval(next, 4500);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const ArrowNext = isRTL ? ArrowLeft : ArrowRight;
+  const ArrowPrevious = isRTL ? ArrowRight : ArrowLeft;
 
   return (
-    <section className="max-w-7xl mx-auto px-4 pt-6">
-      <div className={`relative overflow-hidden rounded-3xl bg-gradient-to-br ${s.bg} text-white min-h-[380px] md:min-h-[460px] transition-all duration-700`}>
-        <div className="absolute inset-0 opacity-20 mix-blend-overlay" style={{backgroundImage: 'radial-gradient(circle at 80% 30%, rgba(255,255,255,0.8), transparent 40%), radial-gradient(circle at 20% 80%, rgba(255,255,255,0.4), transparent 50%)'}} />
-        <div className="relative p-8 md:p-14 flex flex-col justify-center h-full md:max-w-[55%]">
-          <div className="inline-flex self-start items-center gap-2 bg-white/15 backdrop-blur px-3 py-1 rounded-full text-xs mb-5 border border-white/20">
-            <span className="w-1.5 h-1.5 bg-brand-200 rounded-full animate-pulse" />
-            {t(s.tagKey)}
-          </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold leading-[1.05] mb-5 whitespace-pre-line" style={{fontFamily:'var(--font-serif)'}}>{t(s.titleKey)}</h1>
-          <p className="text-white/80 text-sm md:text-base mb-8 max-w-md leading-relaxed">{t(s.descKey)}</p>
-          <button onClick={() => nav(s.link)} className="self-start group bg-white text-brand-700 px-7 h-12 rounded-full font-bold flex items-center gap-2 hover:gap-3 transition-all shadow-xl shadow-black/20">
-            {t(s.ctaKey)}
-            <Arrow className="w-4 h-4 transition" />
-          </button>
-        </div>
-        <img
-          src={s.image}
-          alt=""
-          className="absolute top-0 h-full w-[55%] object-cover opacity-80 mix-blend-luminosity md:mix-blend-normal float-slow hidden md:block"
+    <section className="max-w-7xl mx-auto px-4 pt-5 md:pt-7">
+      <div
+        className="relative isolate overflow-hidden rounded-2xl md:rounded-3xl min-h-[430px] md:min-h-[490px] bg-neutral-900 text-white shadow-xl"
+        dir={dir}
+      >
+        {slides.map((slide, index) => (
+          <img
+            key={slide.id}
+            src={slide.image}
+            alt=""
+            aria-hidden="true"
+            className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${
+              index === i ? "opacity-100" : "opacity-0"
+            }`}
+            style={{
+              transform: isRTL ? "scaleX(-1)" : "scaleX(1)",
+              backfaceVisibility: "hidden",
+            }}
+          />
+        ))}
+
+        <div
+          className="absolute inset-0"
           style={{
-            [dir === 'rtl' ? 'left' : 'right']: 0,
-            maskImage: dir === 'rtl'
-              ? 'linear-gradient(to right, black 60%, transparent)'
-              : 'linear-gradient(to left, black 60%, transparent)',
-          } as React.CSSProperties}
+            background: isRTL
+              ? "linear-gradient(to left, rgba(15,12,13,0.72) 0%, rgba(15,12,13,0.38) 38%, rgba(15,12,13,0.04) 75%)"
+              : "linear-gradient(to right, rgba(15,12,13,0.72) 0%, rgba(15,12,13,0.38) 38%, rgba(15,12,13,0.04) 75%)",
+          }}
         />
 
-        <div className="absolute bottom-6 end-8 flex gap-2 z-10">
-          {slides.map((_, k) => (
-            <button key={k} onClick={() => setI(k)} className={`h-1.5 rounded-full transition-all ${k === i ? 'w-8 bg-white' : 'w-1.5 bg-white/40'}`} />
-          ))}
+        <div
+          className={`relative z-10 flex min-h-[430px] md:min-h-[490px] items-center px-7 py-14 md:px-16 ${
+            isRTL ? "justify-start" : "justify-start"
+          }`}
+        >
+          <div className="max-w-xl w-full">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-md px-4 py-2 text-[10px] md:text-xs tracking-[0.18em] mb-6">
+              <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
+              {copy.tag}
+            </div>
+
+            <h1
+              key={`${currentSlide.id}-title`}
+              className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.2] mb-5 max-w-xl"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
+              {copy.title}
+            </h1>
+
+            <p
+              key={`${currentSlide.id}-desc`}
+              className="text-white/85 text-sm md:text-base leading-8 max-w-md mb-8"
+            >
+              {copy.desc}
+            </p>
+
+            <button
+              onClick={() => nav(currentSlide.link)}
+              className="group inline-flex items-center gap-3 bg-white text-neutral-900 hover:bg-brand-100 px-7 h-12 rounded-full font-bold text-xs md:text-sm transition-all duration-300 shadow-lg"
+            >
+              {copy.cta}
+              <ArrowNext className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </div>
+        </div>
+
+        <div className="absolute z-20 bottom-5 inset-x-6 md:inset-x-10 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={previous}
+              aria-label="Previous slide"
+              className="w-10 h-10 rounded-full border border-white/40 bg-black/20 hover:bg-white hover:text-black backdrop-blur-md flex items-center justify-center transition"
+            >
+              <ArrowPrevious size={17} />
+            </button>
+
+            <button
+              onClick={next}
+              aria-label="Next slide"
+              className="w-10 h-10 rounded-full border border-white/40 bg-black/20 hover:bg-white hover:text-black backdrop-blur-md flex items-center justify-center transition"
+            >
+              <ArrowNext size={17} />
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {slides.map((slide, index) => (
+              <button
+                key={slide.id}
+                onClick={() => setI(index)}
+                aria-label={`Go to slide ${index + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-500 ${
+                  index === i
+                    ? "w-9 bg-white"
+                    : "w-2 bg-white/50 hover:bg-white/80"
+                }`}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </section>
-  )
+  );
 }
