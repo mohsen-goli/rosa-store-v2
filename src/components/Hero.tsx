@@ -126,7 +126,7 @@ export default function Hero() {
     setI((current) => (current - 1 + slides.length) % slides.length);
 
   useEffect(() => {
-    const timer = window.setInterval(next, 4500);
+    const timer = window.setInterval(next, 7000);
     return () => window.clearInterval(timer);
   }, []);
 
@@ -144,7 +144,7 @@ export default function Hero() {
           key={currentSlide.id}
           src={currentSlide.image}
           alt={copy.title}
-          className="block w-full h-auto"
+          className="hero-slide-fade block w-full h-auto"
           style={{
             transform: isRTL ? "scaleX(-1)" : "none",
             backfaceVisibility: "hidden",
