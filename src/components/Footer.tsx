@@ -8,6 +8,7 @@ export default function Footer() {
   const linksCol = [
     { label: t('nav.home'), to: '/' },
     { label: t('nav.shop'), to: '/shop' },
+    { label: t('nav.about'), to: '/about' },
     { label: t('nav.magazine'), to: '/magazine' },
     { label: t('nav.contact'), to: '/contact' },
   ]
