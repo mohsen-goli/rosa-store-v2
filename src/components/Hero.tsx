@@ -133,13 +133,13 @@ export default function Hero() {
 
   // Give each slide more time, then crossfade gently into the next one.
   useEffect(() => {
-    const timer = window.setTimeout(next, 9000);
+    const timer = window.setTimeout(next, 12000);
     return () => window.clearTimeout(timer);
   }, [i]);
 
   useEffect(() => {
     if (previousIndex === null) return;
-    const timer = window.setTimeout(() => setPreviousIndex(null), 1900);
+    const timer = window.setTimeout(() => setPreviousIndex(null), 2500);
     return () => window.clearTimeout(timer);
   }, [previousIndex]);
 
