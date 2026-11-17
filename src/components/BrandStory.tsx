@@ -9,7 +9,7 @@ export default function BrandStory() {
     <section className="max-w-7xl mx-auto px-4 mt-12">
       <div className="grid lg:grid-cols-2 gap-5 bg-white rounded-3xl border border-ink-100 overflow-hidden">
         <div className="relative min-h-80 lg:min-h-115">
-          <img src="https://images.unsplash.com/photo-1583241800698-e8ab01830a07?auto=format&fit=crop&w=1200&q=80" alt="" className="absolute inset-0 w-full h-full object-cover" />
+          <img src="https://rilwptahhvipusiwfjks.supabase.co/storage/v1/object/public/editorial/about/about-hero.webp" alt="" className="absolute inset-0 w-full h-full object-cover" />
           <div className="absolute inset-0 bg-linear-to-t from-brand-800/50 to-transparent" />
         </div>
         <div className="p-8 md:p-14 flex flex-col justify-center">
