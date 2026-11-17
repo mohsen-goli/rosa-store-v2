@@ -16,7 +16,7 @@ export default function About() {
     <main className="max-w-7xl mx-auto px-4 pt-8 pb-10">
       <section className="relative overflow-hidden rounded-3xl bg-ink-900 text-white min-h-[420px] md:min-h-[500px]">
         <img
-          src="https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=1800&q=85"
+          src="https://rilwptahhvipusiwfjks.supabase.co/storage/v1/object/public/editorial/about/about-hero.webp"
           alt="ROSA beauty and skincare"
           className="absolute inset-0 h-full w-full object-cover opacity-45"
         />
@@ -33,7 +33,7 @@ export default function About() {
       <section className="grid items-center gap-8 py-14 md:grid-cols-2 md:gap-14 md:py-20">
         <div className="overflow-hidden rounded-3xl">
           <img
-            src="https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?auto=format&fit=crop&w=1200&q=85"
+            src="https://rilwptahhvipusiwfjks.supabase.co/storage/v1/object/public/editorial/about/about-story.webp"
             alt="A considered beauty ritual"
             loading="lazy"
             className="h-[320px] w-full object-cover md:h-[460px]"
