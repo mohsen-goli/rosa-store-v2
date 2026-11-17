@@ -12,16 +12,29 @@ export default function Account() {
   const [form, setForm] = useState({ name: '', email: '', password: '' })
   const [loading, setLoading] = useState(false)
   const [err, setErr] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
 
   const submit = async (e: FormEvent) => {
     e.preventDefault()
     setErr(null)
+    setNotice(null)
     if (!form.email || !form.password) { setErr('missing_fields'); return }
     if (mode === 'register' && !form.name.trim()) { setErr('missing_fields'); return }
     setLoading(true)
     try {
-      if (mode === 'login') await login(form.email, form.password)
-      else                  await register(form.email, form.password, form.name)
+      if (mode === 'login') {
+        await login(form.email.trim(), form.password)
+      } else {
+        const needsEmailConfirmation = await register(form.email.trim(), form.password, form.name.trim())
+        if (needsEmailConfirmation) {
+          setNotice(lang === 'fa'
+            ? 'حساب ساخته شد. برای فعال‌سازی، ایمیل تأیید Supabase را باز کن و روی لینک تأیید بزن؛ سپس با همین ایمیل و رمز وارد شو.'
+            : 'Your account was created. Open the Supabase confirmation email, click its link, then sign in with the same email and password.')
+          setMode('login')
+          setForm({ name: '', email: form.email.trim(), password: '' })
+          return
+        }
+      }
       setForm({ name: '', email: '', password: '' })
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : 'error'
@@ -65,14 +78,15 @@ export default function Account() {
               placeholder={t('account.password')}
               className="w-full bg-sand border border-ink-100 rounded-xl px-3 py-3 text-sm outline-none focus:border-brand-400"
             />
-            {err && <div className="text-xs text-brand-600">{err}</div>}
+            {notice && <div className="text-xs leading-6 text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl p-3">{notice}</div>}
+            {err && <div className="text-xs text-brand-600 break-words">{err}</div>}
             <button disabled={loading} className="w-full bg-brand-500 hover:bg-brand-600 disabled:bg-ink-300 text-white font-bold h-12 rounded-full flex items-center justify-center gap-2">
               {loading && <Loader2 className="w-4 h-4 animate-spin" />}
               {mode === 'login' ? t('account.loginCta') : t('account.regCta')}
             </button>
           </form>
           <div className="mt-4 text-center text-sm text-ink-500">
-            <button onClick={() => { setMode(m => m === 'login' ? 'register' : 'login'); setErr(null) }} className="text-brand-500 hover:text-brand-700">
+            <button onClick={() => { setMode(m => m === 'login' ? 'register' : 'login'); setErr(null); setNotice(null) }} className="text-brand-500 hover:text-brand-700">
               {mode === 'login' ? t('account.register') : t('account.login')}
             </button>
           </div>
