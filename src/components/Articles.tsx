@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Clock, UserCircle2 } from 'lucide-react'
 import { articles } from '../data'
 import { useI18n } from '../i18n'
@@ -12,11 +13,11 @@ export default function Articles() {
           <h2 className="text-xl md:text-2xl font-extrabold text-ink-900" style={{fontFamily:'var(--font-serif)'}}>{t('home.magTitle')}</h2>
           <p className="text-ink-500 text-xs mt-1">{t('home.magSub')}</p>
         </div>
-        <a href="#" className="text-brand-500 text-sm hover:text-brand-700">{t('action.viewAll')} →</a>
+        <Link to="/magazine" className="text-brand-500 text-sm hover:text-brand-700">{t('action.viewAll')} →</Link>
       </div>
       <div className="grid md:grid-cols-3 gap-4">
         {list.map(a => (
-          <a key={a.id} href="#" className="group bg-white rounded-2xl overflow-hidden border border-ink-100 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/40 transition">
+          <Link key={a.id} to={`/magazine/${a.id}`} className="group block bg-white rounded-2xl overflow-hidden border border-ink-100 hover:border-brand-200 hover:shadow-lg hover:shadow-brand-100/40 transition">
             <div className="aspect-4/3 overflow-hidden">
               <img src={a.image} alt={a.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
             </div>
@@ -28,7 +29,7 @@ export default function Articles() {
                 <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {a.read}</span>
               </div>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>
