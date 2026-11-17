@@ -26,14 +26,14 @@ export default function Ban() {
         {banners.map((banner) => (
           <div
             key={banner.file}
-            className="overflow-hidden rounded-xl"
+            className="flex h-24 items-center justify-center overflow-hidden rounded-xl sm:h-28 lg:h-32"
           >
             <img
               src={banner.src}
               alt={banner.alt}
               loading="lazy"
               decoding="async"
-              className="block h-auto w-full object-contain transition-transform duration-300 hover:scale-[1.02]"
+              className="block h-full w-full object-contain transition-transform duration-300 hover:scale-[1.02]"
             />
           </div>
         ))}
