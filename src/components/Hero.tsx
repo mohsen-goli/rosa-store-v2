@@ -140,19 +140,29 @@ export default function Hero() {
         dir={dir}
       >
         {slides.map((slide, index) => (
-          <img
+          <div
             key={slide.id}
-            src={slide.image}
-            alt=""
-            aria-hidden="true"
-            className={`absolute inset-0 w-full h-full object-contain md:object-cover object-center transition-opacity duration-1000 ${
+            className={`absolute inset-0 transition-opacity duration-1000 ${
               index === i ? "opacity-100" : "opacity-0"
             }`}
-            style={{
-              transform: isRTL ? "scaleX(-1)" : "scaleX(1)",
-              backfaceVisibility: "hidden",
-            }}
-          />
+            aria-hidden="true"
+          >
+            <img
+              src={slide.image}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-70"
+              style={{ transform: isRTL ? "scaleX(-1) scale(1.1)" : "scale(1.1)" }}
+            />
+            <img
+              src={slide.image}
+              alt=""
+              className="absolute inset-0 w-full h-full object-contain object-center"
+              style={{
+                transform: isRTL ? "scaleX(-1)" : "scaleX(1)",
+                backfaceVisibility: "hidden",
+              }}
+            />
+          </div>
         ))}
 
         <div
