@@ -1,8 +1,8 @@
-
 import Hero from '../components/Hero'
 import Services from '../components/Services'
 import CategoryStrip from '../components/CategoryStrip'
 import CatalogProductSection from '../components/CatalogProductSection'
+import Ban from '../components/Ban'
 import BrandStory from '../components/BrandStory'
 import BrandsMarquee from '../components/BrandsMarquee'
 import Articles from '../components/Articles'
@@ -88,6 +88,8 @@ export default function Home() {
               products={deals}
             />
           )}
+
+          <Ban />
 
           {best.length > 0 && (
             <CatalogProductSection
