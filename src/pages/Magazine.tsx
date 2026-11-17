@@ -1,5 +1,6 @@
 import { useI18n } from '../i18n'
 import { articles } from '../data'
+import { Link } from 'react-router-dom'
 import { Clock, UserCircle2 } from 'lucide-react'
 
 export default function Magazine() {
@@ -10,9 +11,9 @@ export default function Magazine() {
       <p className="text-ink-500 text-sm mb-8">{t('home.magSub')}</p>
       <div className="grid md:grid-cols-3 gap-4">
         {articles[lang].map(a => (
-          <article key={a.id} className="bg-white rounded-2xl overflow-hidden border border-ink-100">
+          <Link key={a.id} to={`/magazine/${a.id}`} className="group block bg-white rounded-2xl overflow-hidden border border-ink-100 hover:border-brand-200 hover:shadow-lg transition">
             <div className="aspect-4/3 overflow-hidden">
-              <img src={a.image} alt={a.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
+              <img src={a.image} alt={a.title} loading="lazy" decoding="async" className="w-full h-full object-cover transition duration-500 group-hover:scale-105" />
             </div>
             <div className="p-5 space-y-3">
               <h3 className="font-bold text-ink-900 leading-snug">{a.title}</h3>
@@ -22,7 +23,7 @@ export default function Magazine() {
                 <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {a.read}</span>
               </div>
             </div>
-          </article>
+          </Link>
         ))}
       </div>
     </div>
