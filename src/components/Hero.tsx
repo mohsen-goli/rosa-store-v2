@@ -136,48 +136,31 @@ export default function Hero() {
   return (
     <section className="max-w-7xl mx-auto px-4 pt-5 md:pt-7">
       <div
-        className="relative isolate overflow-hidden rounded-2xl md:rounded-3xl min-h-[430px] md:min-h-[490px] bg-neutral-900 text-white shadow-xl"
+        className="relative isolate overflow-hidden rounded-2xl md:rounded-3xl text-white shadow-xl"
         dir={dir}
       >
-        {slides.map((slide, index) => (
-          <img
-            key={slide.id}
-            src={slide.image}
-            alt=""
-            aria-hidden="true"
-            className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${
-              index === i ? "opacity-100" : "opacity-0"
-            }`}
-            style={{
-              transform: isRTL ? "scaleX(-1)" : "scaleX(1)",
-              backfaceVisibility: "hidden",
-            }}
-          />
-        ))}
-
-        <div
-          className="absolute inset-0"
+        {/* The image keeps its original aspect ratio: no crop and no filler background. */}
+        <img
+          key={currentSlide.id}
+          src={currentSlide.image}
+          alt={copy.title}
+          className="block w-full h-auto"
           style={{
-            background: isRTL
-              ? "linear-gradient(to left, rgba(15,12,13,0.72) 0%, rgba(15,12,13,0.38) 38%, rgba(15,12,13,0.04) 75%)"
-              : "linear-gradient(to right, rgba(15,12,13,0.72) 0%, rgba(15,12,13,0.38) 38%, rgba(15,12,13,0.04) 75%)",
+            transform: isRTL ? "scaleX(-1)" : "none",
+            backfaceVisibility: "hidden",
           }}
         />
 
-        <div
-          className={`relative z-10 flex min-h-[430px] md:min-h-[490px] items-center px-7 py-14 md:px-16 ${
-            isRTL ? "justify-start" : "justify-start"
-          }`}
-        >
+        <div className="absolute inset-0 z-10 flex items-center px-4 py-3 sm:px-7 sm:py-5 md:px-16 md:py-10">
           <div className="max-w-xl w-full">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 backdrop-blur-md px-4 py-2 text-[10px] md:text-xs tracking-[0.18em] mb-6">
+            <div className="hidden sm:inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/15 px-4 py-2 text-[10px] md:text-xs tracking-[0.18em] mb-3 md:mb-6 drop-shadow-lg">
               <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
               {copy.tag}
             </div>
 
             <h1
               key={`${currentSlide.id}-title`}
-              className="text-4xl sm:text-5xl md:text-6xl font-bold leading-[1.2] mb-5 max-w-xl"
+              className="text-lg sm:text-3xl md:text-6xl font-bold leading-tight mb-1 sm:mb-3 md:mb-5 max-w-xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               {copy.title}
@@ -185,41 +168,41 @@ export default function Hero() {
 
             <p
               key={`${currentSlide.id}-desc`}
-              className="text-white/85 text-sm md:text-base leading-8 max-w-md mb-8"
+              className="hidden sm:block text-white/95 text-xs md:text-base leading-7 max-w-md mb-3 md:mb-8 drop-shadow-[0_2px_6px_rgba(0,0,0,0.9)]"
             >
               {copy.desc}
             </p>
 
             <button
               onClick={() => nav(currentSlide.link)}
-              className="group inline-flex items-center gap-3 bg-white text-neutral-900 hover:bg-brand-100 px-7 h-12 rounded-full font-bold text-xs md:text-sm transition-all duration-300 shadow-lg"
+              className="group inline-flex items-center gap-2 sm:gap-3 bg-white text-neutral-900 hover:bg-brand-100 px-3 sm:px-6 md:px-7 h-8 sm:h-10 md:h-12 rounded-full font-bold text-[9px] sm:text-xs md:text-sm transition-all duration-300 shadow-lg"
             >
               {copy.cta}
-              <ArrowNext className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <ArrowNext className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
             </button>
           </div>
         </div>
 
-        <div className="absolute z-20 bottom-5 inset-x-6 md:inset-x-10 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="absolute z-20 bottom-2 sm:bottom-4 inset-x-3 sm:inset-x-6 md:inset-x-10 flex items-center justify-between">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             <button
               onClick={previous}
               aria-label="Previous slide"
-              className="w-10 h-10 rounded-full border border-white/40 bg-black/20 hover:bg-white hover:text-black backdrop-blur-md flex items-center justify-center transition"
+              className="w-7 h-7 sm:w-10 sm:h-10 rounded-full border border-white/50 bg-black/25 hover:bg-white hover:text-black flex items-center justify-center transition"
             >
-              <ArrowPrevious size={17} />
+              <ArrowPrevious size={15} />
             </button>
 
             <button
               onClick={next}
               aria-label="Next slide"
-              className="w-10 h-10 rounded-full border border-white/40 bg-black/20 hover:bg-white hover:text-black backdrop-blur-md flex items-center justify-center transition"
+              className="w-7 h-7 sm:w-10 sm:h-10 rounded-full border border-white/50 bg-black/25 hover:bg-white hover:text-black flex items-center justify-center transition"
             >
-              <ArrowNext size={17} />
+              <ArrowNext size={15} />
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5 sm:gap-2">
             {slides.map((slide, index) => (
               <button
                 key={slide.id}
@@ -227,8 +210,8 @@ export default function Hero() {
                 aria-label={`Go to slide ${index + 1}`}
                 className={`h-1.5 rounded-full transition-all duration-500 ${
                   index === i
-                    ? "w-9 bg-white"
-                    : "w-2 bg-white/50 hover:bg-white/80"
+                    ? "w-6 sm:w-9 bg-white"
+                    : "w-1.5 sm:w-2 bg-white/60 hover:bg-white/90"
                 }`}
               />
             ))}
