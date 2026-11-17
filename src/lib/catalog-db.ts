@@ -65,13 +65,19 @@ function mapVariant(row: VariantRow): ProductVariant {
     { market: 'iran', currency: 'IRR', amount: Number(row.price_irr) },
   ]
 
-  if (row.price_usd_cents !== null) {
-    prices.push({
-      market: 'international',
-      currency: 'USD',
-      amount: Number(row.price_usd_cents) / 100,
-    })
-  }
+  // Every active variant must have an international price. When an
+  // explicit USD price is not stored, derive it from the canonical IRR price.
+  // Exchange rate confirmed for ROSA: 1 USD = 2,500,000 IRR.
+  const usdAmount =
+    row.price_usd_cents !== null
+      ? Number(row.price_usd_cents) / 100
+      : Number(row.price_irr) / 2_500_000
+
+  prices.push({
+    market: 'international',
+    currency: 'USD',
+    amount: Math.round(usdAmount * 100) / 100,
+  })
 
   return {
     id: row.id,
