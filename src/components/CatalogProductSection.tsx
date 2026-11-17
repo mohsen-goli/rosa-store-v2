@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
@@ -19,8 +19,9 @@ export default function CatalogProductSection({
   products,
   viewAllTo = "/shop",
 }: Props) {
-  const { t, dir } = useI18n();
+  const { t, dir, lang } = useI18n();
   const scroller = useRef<HTMLDivElement>(null);
+  const [showAll, setShowAll] = useState(false);
 
   const scroll = (forward: boolean) => {
     const element = scroller.current;
@@ -33,6 +34,11 @@ export default function CatalogProductSection({
       behavior: "smooth",
     });
   };
+
+  const moreLabel =
+    lang === "fa" ? "نمایش محصولات بیشتر" : lang === "ar" ? "عرض المزيد" : "Show more";
+  const lessLabel =
+    lang === "fa" ? "نمایش کمتر" : lang === "ar" ? "عرض أقل" : "Show less";
 
   return (
     <section className="max-w-7xl mx-auto px-4 mt-12">
@@ -61,7 +67,7 @@ export default function CatalogProductSection({
 
             <button
               onClick={() => scroll(false)}
-              className="w-9 h-9 rounded-full border border-ink-100 hover:bg-sand grid place-items-center"
+              className="hidden md:grid w-9 h-9 rounded-full border border-ink-100 hover:bg-sand place-items-center"
               aria-label="prev"
             >
               <ChevronRight className="w-4 h-4" />
@@ -69,7 +75,7 @@ export default function CatalogProductSection({
 
             <button
               onClick={() => scroll(true)}
-              className="w-9 h-9 rounded-full border border-ink-100 hover:bg-sand grid place-items-center"
+              className="hidden md:grid w-9 h-9 rounded-full border border-ink-100 hover:bg-sand place-items-center"
               aria-label="next"
             >
               <ChevronLeft className="w-4 h-4" />
@@ -79,14 +85,32 @@ export default function CatalogProductSection({
 
         <div
           ref={scroller}
-          className="flex gap-3 p-5 overflow-x-auto no-scrollbar snap-x snap-mandatory"
+          className="flex flex-col md:flex-row gap-4 p-4 md:p-5 md:overflow-x-auto no-scrollbar md:snap-x md:snap-mandatory"
         >
-          {products.map((product) => (
-            <div key={product.id} className="snap-start">
+          {products.map((product, index) => (
+            <div
+              key={product.id}
+              className={`w-full md:w-auto md:shrink-0 md:snap-start ${
+                index >= 4 && !showAll ? "hidden md:block" : ""
+              }`}
+            >
               <CatalogProductCard product={product} />
             </div>
           ))}
         </div>
+
+        {products.length > 4 && (
+          <div className="px-4 pb-5 flex justify-center md:hidden">
+            <button
+              type="button"
+              onClick={() => setShowAll((current) => !current)}
+              className="min-w-40 px-6 py-3 rounded-full border border-brand-200 text-brand-600 hover:bg-brand-50 text-sm font-semibold transition-colors"
+              aria-expanded={showAll}
+            >
+              {showAll ? lessLabel : moreLabel}
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );
