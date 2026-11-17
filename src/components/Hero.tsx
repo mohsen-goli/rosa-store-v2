@@ -133,13 +133,13 @@ export default function Hero() {
 
   // Give each slide more time, then crossfade gently into the next one.
   useEffect(() => {
-    const timer = window.setTimeout(next, 9000);
+    const timer = window.setTimeout(next, 5500);
     return () => window.clearTimeout(timer);
   }, [i]);
 
   useEffect(() => {
     if (previousIndex === null) return;
-    const timer = window.setTimeout(() => setPreviousIndex(null), 2500);
+    const timer = window.setTimeout(() => setPreviousIndex(null), 900);
     return () => window.clearTimeout(timer);
   }, [previousIndex]);
 
@@ -149,7 +149,7 @@ export default function Hero() {
   return (
     <section className="max-w-7xl mx-auto px-4 pt-5 md:pt-7">
       <div
-        className="relative isolate overflow-hidden rounded-2xl md:rounded-3xl text-white shadow-xl"
+        className="relative isolate aspect-[4/3] sm:aspect-[16/7] overflow-hidden rounded-2xl md:rounded-3xl text-white shadow-xl"
         dir={dir}
       >
         {/* The image keeps its original aspect ratio: no crop and no filler background. */}
@@ -159,7 +159,7 @@ export default function Hero() {
             src={slides[previousIndex].image}
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 z-0 h-full w-full object-cover"
+            className="absolute inset-0 z-0 h-full w-full object-cover object-center"
             style={{ transform: isRTL ? "scaleX(-1)" : "none" }}
           />
         )}
@@ -167,10 +167,11 @@ export default function Hero() {
           key={currentSlide.id}
           src={currentSlide.image}
           alt={copy.title}
-          className="hero-slide-fade relative z-[1] block h-auto w-full"
+          className="hero-slide-fade absolute inset-0 z-[1] block h-full w-full object-cover object-center"
           style={{
             transform: isRTL ? "scaleX(-1)" : "none",
             backfaceVisibility: "hidden",
+            objectPosition: "center",
           }}
         />
 
