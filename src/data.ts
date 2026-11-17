@@ -128,20 +128,26 @@ export const brands = [
   'La Roche-Posay', 'Tom Ford', 'Armani', 'Moroccanoil',
 ]
 
+const editorialImages = {
+  skincare: 'https://rilwptahhvipusiwfjks.supabase.co/storage/v1/object/public/editorial/magazine/magazine-skincare.webp',
+  serum: 'https://rilwptahhvipusiwfjks.supabase.co/storage/v1/object/public/editorial/magazine/magazine-serum.webp',
+  makeup: 'https://rilwptahhvipusiwfjks.supabase.co/storage/v1/object/public/editorial/magazine/magazine-makeup.webp',
+}
+
 export const articles = {
   fa: [
-    { id: 'a1', title: 'راهنمای کامل روتین پوستی برای پوست چرب و جوش دار', excerpt: 'در این مقاله با روتین روزانه، محصولات مؤثر و ترکیبات کاربردی برای کنترل چربی پوست آشنا می‌شوید.', author: 'دکتر مهشید رضائی', read: '۸ دقیقه', image: img(P.skin1) },
-    { id: 'a2', title: 'بهترین سرم‌های ضد چروک سال ۱۴۰۵', excerpt: 'مقایسه جامع سرم‌های ضد چروک برتر بر اساس ترکیبات، نحوه مصرف و قیمت.', author: 'پرستو پاسبان', read: '۱۲ دقیقه', image: img(P.cream) },
-    { id: 'a3', title: 'تفاوت ضد آفتاب شیمیایی و فیزیکی', excerpt: 'راهنمای انتخاب ضد آفتاب مناسب هر نوع پوست.', author: 'بهاره شاه محمدی', read: '۶ دقیقه', image: img(P.creamPk) },
+    { id: 'a1', title: 'راهنمای کامل روتین پوستی برای پوست چرب و جوش دار', excerpt: 'در این مقاله با روتین روزانه، محصولات مؤثر و ترکیبات کاربردی برای کنترل چربی پوست آشنا می‌شوید.', author: 'دکتر مهشید رضائی', read: '۸ دقیقه', image: editorialImages.skincare },
+    { id: 'a2', title: 'بهترین سرم‌های ضد چروک سال ۱۴۰۵', excerpt: 'مقایسه جامع سرم‌های ضد چروک برتر بر اساس ترکیبات، نحوه مصرف و قیمت.', author: 'پرستو پاسبان', read: '۱۲ دقیقه', image: editorialImages.serum },
+    { id: 'a3', title: 'تفاوت ضد آفتاب شیمیایی و فیزیکی', excerpt: 'راهنمای انتخاب ضد آفتاب مناسب هر نوع پوست.', author: 'بهاره شاه محمدی', read: '۶ دقیقه', image: editorialImages.makeup },
   ],
   en: [
-    { id: 'a1', title: 'The complete skincare routine for oily, acne-prone skin', excerpt: 'Learn the daily routine, effective products and useful actives to control excess oil.', author: 'Dr. Mahshid Rezaei', read: '8 min', image: img(P.skin1) },
-    { id: 'a2', title: 'Best anti-wrinkle serums of 2026 — comparison', excerpt: 'A comprehensive comparison of top anti-wrinkle serums by actives, usage and price.', author: 'Parasto Pasban', read: '12 min', image: img(P.cream) },
-    { id: 'a3', title: 'Chemical vs physical sunscreen', excerpt: 'A practical guide to choosing the right SPF for every skin type.', author: 'Bahareh Shah', read: '6 min', image: img(P.creamPk) },
+    { id: 'a1', title: 'The complete skincare routine for oily, acne-prone skin', excerpt: 'Learn the daily routine, effective products and useful actives to control excess oil.', author: 'Dr. Mahshid Rezaei', read: '8 min', image: editorialImages.skincare },
+    { id: 'a2', title: 'Best anti-wrinkle serums of 2026 — comparison', excerpt: 'A comprehensive comparison of top anti-wrinkle serums by actives, usage and price.', author: 'Parasto Pasban', read: '12 min', image: editorialImages.serum },
+    { id: 'a3', title: 'Chemical vs physical sunscreen', excerpt: 'A practical guide to choosing the right SPF for every skin type.', author: 'Bahareh Shah', read: '6 min', image: editorialImages.makeup },
   ],
   ar: [
-    { id: 'a1', title: 'روتين كامل للعناية بالبشرة الدهنية المعرضة لحب الشباب', excerpt: 'تعرفي على الروتين اليومي والمنتجات الفعالة للتحكم بالدهون.', author: 'د. مهشيد رضائي', read: '٨ دقائق', image: img(P.skin1) },
-    { id: 'a2', title: 'أفضل سيرومات مضادة للتجاعيد لعام ٢٠٢٦', excerpt: 'مقارنة شاملة لأفضل السيرومات حسب المكونات والسعر.', author: 'برستو باسبان', read: '١٢ دقيقة', image: img(P.cream) },
-    { id: 'a3', title: 'الفرق بين واقي الشمس الكيميائي والفيزيائي', excerpt: 'دليل عملي لاختيار الواقي المناسب لبشرتك.', author: 'بهاره شاه', read: '٦ دقائق', image: img(P.creamPk) },
+    { id: 'a1', title: 'روتين كامل للعناية بالبشرة الدهنية المعرضة لحب الشباب', excerpt: 'تعرفي على الروتين اليومي والمنتجات الفعالة للتحكم بالدهون.', author: 'د. مهشيد رضائي', read: '٨ دقائق', image: editorialImages.skincare },
+    { id: 'a2', title: 'أفضل سيرومات مضادة للتجاعيد لعام ٢٠٢٦', excerpt: 'مقارنة شاملة لأفضل السيرومات حسب المكونات والسعر.', author: 'برستو باسبان', read: '١٢ دقيقة', image: editorialImages.serum },
+    { id: 'a3', title: 'الفرق بين واقي الشمس الكيميائي والفيزيائي', excerpt: 'دليل عملي لاختيار الواقي المناسب لبشرتك.', author: 'بهاره شاه', read: '٦ دقائق', image: editorialImages.makeup },
   ],
 }
