@@ -145,7 +145,7 @@ export default function Hero() {
             src={slide.image}
             alt=""
             aria-hidden="true"
-            className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-1000 ${
+            className={`absolute inset-0 w-full h-full object-contain md:object-cover object-center transition-opacity duration-1000 ${
               index === i ? "opacity-100" : "opacity-0"
             }`}
             style={{
