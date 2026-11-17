@@ -59,7 +59,7 @@ type StoreCtx = {
 
   // auth
   login: (email: string, password: string) => Promise<void>
-  register: (email: string, password: string, name: string) => Promise<void>
+  register: (email: string, password: string, name: string) => Promise<boolean>
   logout: () => Promise<void>
 
   // orders / lookups
@@ -229,17 +229,25 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     }
   }, [toast])
 
-  const register = useCallback(async (email: string, password: string, name: string) => {
+  const register = useCallback(async (email: string, password: string, name: string): Promise<boolean> => {
     if (hasSupabase) {
-      try { await authSignUp(email, password, name); toast('Account created') }
-      catch (e: unknown) {
+      try {
+        const result = await authSignUp(email, password, name)
+        const needsEmailConfirmation = !result.session
+        if (result.session?.user) {
+          const u = result.session.user
+          setUser({ id: u.id, email: u.email ?? email, name: name || (u.email?.split('@')[0] ?? 'User') })
+        }
+        toast(needsEmailConfirmation ? 'Check your email to confirm your account' : 'Account created')
+        return needsEmailConfirmation
+      } catch (e: unknown) {
         const msg = e instanceof Error ? e.message : 'register failed'
         toast(msg, 'error'); throw e
       }
-    } else {
-      setUser({ email, name })
-      toast('Account created')
     }
+    setUser({ email, name })
+    toast('Account created')
+    return false
   }, [toast])
 
   const logout = useCallback(async () => {
