@@ -64,7 +64,7 @@ html, body, #root {
   to { opacity: 1; }
 }
 .hero-slide-fade {
-  animation: hero-slide-fade 1.8s ease-in-out both;
+  animation: hero-slide-fade .85s ease-out both;
   will-change: opacity;
 }
 
