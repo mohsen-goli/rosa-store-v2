@@ -91,14 +91,17 @@ export async function createOrder(input: DbOrderInput): Promise<string> {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) throw new Error('auth_required')
 
+  // The database stores order money as integer minor units.
+  // IRR uses whole rials; USD is stored as cents to preserve decimals.
+  const minorUnit = input.customer.currency === 'USD' ? 100 : 1
   const { data: order, error: orderErr } = await supabase
     .from('orders')
     .insert({
       user_id:  user.id,
       code:     input.code,
-      subtotal: input.subtotal,
-      shipping: input.shipping,
-      total:    input.total,
+      subtotal: Math.round(input.subtotal * minorUnit),
+      shipping: Math.round(input.shipping * minorUnit),
+      total:    Math.round(input.total * minorUnit),
       customer: input.customer,
       status:   'pending',
     })
@@ -111,7 +114,7 @@ export async function createOrder(input: DbOrderInput): Promise<string> {
       order_id:   order.id,
       product_id: i.productId,
       qty:        i.qty,
-      price:      i.price,
+      price:      Math.round(i.price * minorUnit),
     }))
   )
   if (itemsErr) throw itemsErr
@@ -138,9 +141,9 @@ export async function fetchMyOrders(): Promise<Order[]> {
   return (data as Row[]).map((r): Order => ({
     id: r.code,
     createdAt: new Date(r.created_at).getTime(),
-    items: r.order_items.map(i => ({ productId: i.product_id, qty: i.qty, price: i.price })),
-    total: r.total,
-    shipping: r.shipping,
+    items: r.order_items.map(i => ({ productId: i.product_id, qty: i.qty, price: r.customer?.currency === 'USD' ? i.price / 100 : i.price })),
+    total: r.customer?.currency === 'USD' ? r.total / 100 : r.total,
+    shipping: r.customer?.currency === 'USD' ? r.shipping / 100 : r.shipping,
     customer: r.customer,
     status: r.status,
   }))
