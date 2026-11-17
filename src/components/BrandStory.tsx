@@ -16,7 +16,7 @@ export default function BrandStory() {
           <span className="text-xs font-bold tracking-widest uppercase text-brand-500 mb-3">{t('home.storyTag')}</span>
           <h2 className="text-3xl md:text-4xl font-extrabold leading-tight mb-4" style={{fontFamily:'var(--font-serif)'}}>{t('home.storyTitle')}</h2>
           <p className="text-ink-500 leading-relaxed mb-6">{t('home.storyDesc')}</p>
-          <Link to="/shop" className="self-start group bg-brand-500 hover:bg-brand-600 text-white px-6 h-12 rounded-full font-bold flex items-center gap-2 hover:gap-3 transition-all">
+          <Link to="/about" className="self-start group bg-brand-500 hover:bg-brand-600 text-white px-6 h-12 rounded-full font-bold flex items-center gap-2 hover:gap-3 transition-all">
             {t('home.storyCta')}
             <Arrow className="w-4 h-4" />
           </Link>
