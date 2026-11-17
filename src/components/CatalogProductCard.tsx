@@ -52,7 +52,7 @@ export default function CatalogProductCard({ product }: Props) {
     : undefined;
 
   return (
-    <article className="group relative bg-white rounded-2xl border border-ink-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/40 transition-all overflow-hidden flex flex-col w-full min-w-0 md:min-w-52.5 md:w-52.5">
+    <article className="group relative bg-white rounded-2xl border border-ink-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/40 transition-all overflow-hidden flex flex-col min-w-52.5 w-52.5">
       {badgeLabel && (
         <span className="absolute top-3 inset-s-3 z-10 bg-ink-900 text-white text-[10px] px-2 py-1 rounded-full font-semibold">
           {badgeLabel}
