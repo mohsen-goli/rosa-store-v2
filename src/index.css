@@ -56,3 +56,17 @@ html, body, #root {
 
 /* toast */
 .toast-enter { animation: fade-up .25s ease-out both; }
+
+
+/* Gentle cross-slide entrance for the homepage hero */
+@keyframes hero-slide-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.hero-slide-fade {
+  animation: hero-slide-fade 1.15s ease-in-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-slide-fade { animation: none; }
+}
