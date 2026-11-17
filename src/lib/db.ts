@@ -135,7 +135,7 @@ export async function fetchMyOrders(): Promise<Order[]> {
   type Row = {
     id: string; code: string; status: Order['status']
     subtotal: number; shipping: number; total: number
-    customer: Order['customer']; created_at: string
+    customer: Order['customer'] & { currency?: 'IRR' | 'USD'; market?: 'iran' | 'international' }; created_at: string
     order_items: { product_id: string; qty: number; price: number }[]
   }
   return (data as Row[]).map((r): Order => ({
