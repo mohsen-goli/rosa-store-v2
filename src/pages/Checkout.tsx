@@ -98,7 +98,14 @@ export default function Checkout() {
     if (form.address.trim().length < 6) nextErrors.address = true;
     setErrors(nextErrors);
 
-    if (Object.keys(nextErrors).length) return;
+    if (Object.keys(nextErrors).length) {
+      setSubmitErr(
+        lang === "fa"
+          ? "لطفاً نام، شماره تماس، شهر و آدرس معتبر را بررسی کنید. یادداشت سفارش اختیاری است."
+          : "Please check your name, phone, city and address. Order note is optional.",
+      );
+      return;
+    }
     if (!items.length) return;
     if (invalidItems) {
       setSubmitErr(lang === "fa" ? "موجودی یا قیمت یکی از محصولات تغییر کرده است. سبد خرید را بررسی کنید." : "A product price or stock level has changed. Please review your cart.");
@@ -134,7 +141,18 @@ export default function Checkout() {
       clearMarketCart();
       setDone(orderId);
     } catch (error) {
-      setSubmitErr(error instanceof Error ? error.message : "order_failed");
+      console.error("[ROSA checkout] order submission failed:", error);
+      const details =
+        error && typeof error === "object" && "message" in error
+          ? String((error as { message: unknown }).message)
+          : error instanceof Error
+            ? error.message
+            : String(error);
+      setSubmitErr(
+        lang === "fa"
+          ? `ثبت سفارش انجام نشد: ${details || "خطای نامشخص"}`
+          : `Order could not be placed: ${details || "Unknown error"}`,
+      );
     } finally {
       setSubmitting(false);
     }
@@ -228,9 +246,11 @@ export default function Checkout() {
           </div>
           {invalidItems && <p className="mt-3 text-xs text-red-600">{lang === "fa" ? "موجودی یا قیمت محصولات سبد نیاز به بررسی دارد." : "Please review product prices and stock."}</p>}
           {submitErr && <p className="mt-3 text-xs text-brand-600 break-words">{submitErr}</p>}
-          <button disabled={submitting || invalidItems} className="mt-5 w-full bg-brand-500 hover:bg-brand-600 disabled:bg-ink-300 text-white font-bold h-12 rounded-full flex items-center justify-center gap-2">
+          <button type="submit" disabled={submitting || invalidItems} className="mt-5 w-full bg-brand-500 hover:bg-brand-600 disabled:bg-ink-300 text-white font-bold h-12 rounded-full flex items-center justify-center gap-2">
             {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
-            {t("action.placeOrder")}
+            {submitting
+              ? (lang === "fa" ? "در حال ثبت سفارش..." : "Placing order...")
+              : t("action.placeOrder")}
           </button>
           <p className="mt-3 text-[11px] text-ink-500 text-center">{t("checkout.pay")}</p>
         </aside>
