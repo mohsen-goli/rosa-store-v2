@@ -103,6 +103,7 @@ export async function createOrder(input: DbOrderInput): Promise<string> {
       shipping: Math.round(input.shipping * minorUnit),
       total:    Math.round(input.total * minorUnit),
       market:   input.customer.market ?? 'iran',
+      currency: input.customer.currency ?? 'IRR',
       customer: input.customer,
       status:   'pending',
     })
