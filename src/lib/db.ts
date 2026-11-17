@@ -82,7 +82,7 @@ export type DbOrderInput = {
   subtotal: number
   shipping: number
   total: number
-  customer: Order['customer']
+  customer: Order['customer'] & { market?: 'iran' | 'international'; currency?: 'IRR' | 'USD' }
   items: { productId: string; qty: number; price: number }[]
 }
 
