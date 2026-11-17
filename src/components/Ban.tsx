@@ -8,11 +8,12 @@ const bannerFiles = [
 ]
 
 export default function Ban() {
-  if (!supabase) return null
+  const client = supabase
+  if (!client) return null
 
   const banners = bannerFiles.map((file, index) => ({
     file,
-    src: supabase.storage.from('ban').getPublicUrl(file).data.publicUrl,
+    src: client.storage.from('ban').getPublicUrl(file).data.publicUrl,
     alt: `ROSA Beauty promotional banner ${index + 1}`,
   }))
 
