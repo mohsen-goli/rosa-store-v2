@@ -14,6 +14,7 @@ import Checkout from "./pages/Checkout";
 import Account from "./pages/Account";
 import Wishlist from "./pages/Wishlist";
 import Magazine from "./pages/Magazine";
+import MagazineArticle from "./pages/MagazineArticle";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 
@@ -51,6 +52,7 @@ function Shell() {
           <Route path="/account" element={<Account />} />
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/magazine" element={<Magazine />} />
+          <Route path="/magazine/:id" element={<MagazineArticle />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/about" element={<About />} />
           <Route path="*" element={<Home />} />
