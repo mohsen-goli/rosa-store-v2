@@ -20,20 +20,20 @@ export default function Ban() {
   return (
     <section
       aria-label="ROSA Beauty banners"
-      className="mx-auto mt-10 w-full max-w-7xl px-4 sm:mt-12"
+      className="mx-auto mt-8 w-full max-w-7xl px-4 sm:mt-10"
     >
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         {banners.map((banner) => (
           <div
             key={banner.file}
-            className="group overflow-hidden rounded-2xl bg-[#f7f1ed]"
+            className="overflow-hidden rounded-xl"
           >
             <img
               src={banner.src}
               alt={banner.alt}
               loading="lazy"
               decoding="async"
-              className="block h-auto w-full object-contain transition-transform duration-500 group-hover:scale-[1.015]"
+              className="block h-auto w-full object-contain transition-transform duration-300 hover:scale-[1.02]"
             />
           </div>
         ))}
