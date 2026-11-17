@@ -107,7 +107,12 @@ export async function createOrder(input: DbOrderInput): Promise<string> {
     })
     .select('id')
     .single()
-  if (orderErr || !order) throw orderErr ?? new Error('order_insert_failed')
+  if (orderErr || !order) {
+    const reason = orderErr
+      ? [orderErr.message, orderErr.details, orderErr.hint, orderErr.code].filter(Boolean).join(' | ')
+      : 'Supabase returned no order row'
+    throw new Error(`orders insert failed: ${reason}`)
+  }
 
   const { error: itemsErr } = await supabase.from('order_items').insert(
     input.items.map(i => ({
@@ -117,7 +122,12 @@ export async function createOrder(input: DbOrderInput): Promise<string> {
       price:      Math.round(i.price * minorUnit),
     }))
   )
-  if (itemsErr) throw itemsErr
+  if (itemsErr) {
+    const reason = [itemsErr.message, itemsErr.details, itemsErr.hint, itemsErr.code]
+      .filter(Boolean)
+      .join(' | ')
+    throw new Error(`order_items insert failed: ${reason}`)
+  }
 
   return order.id
 }
