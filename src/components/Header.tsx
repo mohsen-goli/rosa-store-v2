@@ -14,6 +14,7 @@ const navItems: { to: string; key: string }[] = [
   { to: "/shop/makeup", key: "nav.makeup" },
   { to: "/shop/perfume", key: "nav.perfume" },
   { to: "/shop/haircare", key: "nav.haircare" },
+  { to: "/about", key: "nav.about" },
 ];
 
 export default function Header() {
