@@ -12,7 +12,7 @@ export default function Magazine() {
         {articles[lang].map(a => (
           <article key={a.id} className="bg-white rounded-2xl overflow-hidden border border-ink-100">
             <div className="aspect-4/3 overflow-hidden">
-              <img src={a.image} alt={a.title} className="w-full h-full object-cover" />
+              <img src={a.image} alt={a.title} loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
             <div className="p-5 space-y-3">
               <h3 className="font-bold text-ink-900 leading-snug">{a.title}</h3>
