@@ -114,6 +114,13 @@ export default function Hero() {
   const { dir, lang } = useI18n();
   const nav = useNavigate();
   const [i, setI] = useState(0);
+  const [previousIndex, setPreviousIndex] = useState<number | null>(null);
+
+  const goTo = (index: number) => {
+    if (index === i) return;
+    setPreviousIndex(i);
+    setI(index);
+  };
 
   const isRTL = dir === "rtl";
   const currentSlide = slides[i];
@@ -121,14 +128,20 @@ export default function Hero() {
     currentSlide.text[lang as keyof typeof currentSlide.text] ??
     currentSlide.text.en;
 
-  const next = () => setI((current) => (current + 1) % slides.length);
-  const previous = () =>
-    setI((current) => (current - 1 + slides.length) % slides.length);
+  const next = () => goTo((i + 1) % slides.length);
+  const previous = () => goTo((i - 1 + slides.length) % slides.length);
+
+  // Give each slide more time, then crossfade gently into the next one.
+  useEffect(() => {
+    const timer = window.setTimeout(next, 9000);
+    return () => window.clearTimeout(timer);
+  }, [i]);
 
   useEffect(() => {
-    const timer = window.setInterval(next, 7000);
-    return () => window.clearInterval(timer);
-  }, []);
+    if (previousIndex === null) return;
+    const timer = window.setTimeout(() => setPreviousIndex(null), 1900);
+    return () => window.clearTimeout(timer);
+  }, [previousIndex]);
 
   const ArrowNext = isRTL ? ArrowLeft : ArrowRight;
   const ArrowPrevious = isRTL ? ArrowRight : ArrowLeft;
@@ -140,11 +153,21 @@ export default function Hero() {
         dir={dir}
       >
         {/* The image keeps its original aspect ratio: no crop and no filler background. */}
+        {previousIndex !== null && (
+          <img
+            key={`previous-${slides[previousIndex].id}`}
+            src={slides[previousIndex].image}
+            alt=""
+            aria-hidden="true"
+            className="absolute inset-0 z-0 h-full w-full object-cover"
+            style={{ transform: isRTL ? "scaleX(-1)" : "none" }}
+          />
+        )}
         <img
           key={currentSlide.id}
           src={currentSlide.image}
           alt={copy.title}
-          className="hero-slide-fade block w-full h-auto"
+          className="hero-slide-fade relative z-[1] block h-auto w-full"
           style={{
             transform: isRTL ? "scaleX(-1)" : "none",
             backfaceVisibility: "hidden",
@@ -206,7 +229,7 @@ export default function Hero() {
             {slides.map((slide, index) => (
               <button
                 key={slide.id}
-                onClick={() => setI(index)}
+                onClick={() => goTo(index)}
                 aria-label={`Go to slide ${index + 1}`}
                 className={`h-1.5 rounded-full transition-all duration-500 ${
                   index === i
