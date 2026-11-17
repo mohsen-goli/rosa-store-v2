@@ -15,6 +15,7 @@ import Account from "./pages/Account";
 import Wishlist from "./pages/Wishlist";
 import Magazine from "./pages/Magazine";
 import Contact from "./pages/Contact";
+import About from "./pages/About";
 
 import { I18nProvider } from "./i18n";
 import { CatalogProvider } from "./CatalogContext";
@@ -51,6 +52,7 @@ function Shell() {
           <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/magazine" element={<Magazine />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/about" element={<About />} />
           <Route path="*" element={<Home />} />
         </Routes>
       </main>
