@@ -83,7 +83,12 @@ export type DbOrderInput = {
   shipping: number
   total: number
   customer: Order['customer'] & { market?: 'iran' | 'international'; currency?: 'IRR' | 'USD' }
-  items: { productId: string; qty: number; price: number }[]
+  items: {
+    productId: string
+    qty: number
+    price: number
+    productSnapshot: Record<string, unknown>
+  }[]
 }
 
 export async function createOrder(input: DbOrderInput): Promise<string> {
@@ -118,10 +123,12 @@ export async function createOrder(input: DbOrderInput): Promise<string> {
 
   const { error: itemsErr } = await supabase.from('order_items').insert(
     input.items.map(i => ({
-      order_id:   order.id,
+      order_id: order.id,
       product_id: i.productId,
-      qty:        i.qty,
-      price:      Math.round(i.price * minorUnit),
+      product_snapshot: i.productSnapshot,
+      quantity: i.qty,
+      unit_price: Math.round(i.price * minorUnit),
+      line_total: Math.round(i.price * i.qty * minorUnit),
     }))
   )
   if (itemsErr) {
@@ -140,7 +147,7 @@ export async function fetchMyOrders(): Promise<Order[]> {
   if (!user) return []
   const { data, error } = await supabase
     .from('orders')
-    .select('id, code, status, subtotal, shipping, total, customer, created_at, order_items(product_id, qty, price)')
+    .select('id, code, status, subtotal, shipping, total, customer, created_at, order_items(product_id, quantity, unit_price)')
     .eq('user_id', user.id)
     .order('created_at', { ascending: false })
   if (error || !data) return []
@@ -148,12 +155,12 @@ export async function fetchMyOrders(): Promise<Order[]> {
     id: string; code: string; status: Order['status']
     subtotal: number; shipping: number; total: number
     customer: Order['customer'] & { currency?: 'IRR' | 'USD'; market?: 'iran' | 'international' }; created_at: string
-    order_items: { product_id: string; qty: number; price: number }[]
+    order_items: { product_id: string; quantity: number; unit_price: number }[]
   }
   return (data as Row[]).map((r): Order => ({
     id: r.code,
     createdAt: new Date(r.created_at).getTime(),
-    items: r.order_items.map(i => ({ productId: i.product_id, qty: i.qty, price: r.customer?.currency === 'USD' ? i.price / 100 : i.price })),
+    items: r.order_items.map(i => ({ productId: i.product_id, qty: i.quantity, price: r.customer?.currency === 'USD' ? i.unit_price / 100 : i.unit_price })),
     total: r.customer?.currency === 'USD' ? r.total / 100 : r.total,
     shipping: r.customer?.currency === 'USD' ? r.shipping / 100 : r.shipping,
     customer: r.customer,
