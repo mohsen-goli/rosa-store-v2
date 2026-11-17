@@ -119,10 +119,19 @@ export default function Checkout() {
     setSubmitting(true);
     try {
       const code = "ROS-" + Math.random().toString(36).slice(2, 8).toUpperCase();
-      const orderItems = cartLines.map(({ item, unitPrice }) => ({
+      const orderItems = cartLines.map(({ item, product, variant, unitPrice }) => ({
         productId: item.productId,
         qty: item.qty,
         price: Math.round((unitPrice ?? 0) * 100) / 100,
+        productSnapshot: {
+          productId: item.productId,
+          title: product?.translations ?? {},
+          brand: product?.brand ?? "",
+          category: product?.category ?? "",
+          images: product?.images ?? [],
+          variantId: item.variantId,
+          variant: variant ?? null,
+        },
       }));
 
       const orderId = await createOrder({
