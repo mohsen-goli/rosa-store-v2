@@ -262,7 +262,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     const items = cart.map(i => {
       const p = products.find(x => x.id === i.productId)!
       const price = p.discount ? Math.round(p.price * (100 - p.discount) / 100) : p.price
-      return { productId: i.productId, qty: i.qty, price }
+      return {
+        productId: i.productId,
+        qty: i.qty,
+        price,
+        productSnapshot: {
+          productId: p.id,
+          title: p.title,
+          brand: p.brand,
+          category: p.category,
+          images: p.images,
+        },
+      }
     })
     const subtotal = items.reduce((s, i) => s + i.price * i.qty, 0)
     const shipping = subtotal >= 500_000 ? 0 : 45_000
