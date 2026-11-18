@@ -15,6 +15,7 @@ import { useCart } from "../CartContext";
 import { useStore } from "../store";
 import { useI18n } from "../i18n";
 import CatalogProductCard from "../components/CatalogProductCard";
+import ProductReviews from "../components/ProductReviews";
 import { localizeDigits } from "../lib/utils";
 
 function formatMarketPrice(
@@ -414,6 +415,8 @@ export default function ProductDetail() {
           </ul>
         </div>
       </div>
+
+      <ProductReviews productId={product.id} />
 
       {related.length > 0 && (
         <div className="mt-10">
