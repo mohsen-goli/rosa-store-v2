@@ -13,9 +13,9 @@ export default function SiteFeedback() {
   const [status, setStatus] = useState<'success' | 'error' | ''>('')
 
   const copy = {
-    fa: { title: 'صدای شما برای ROSA', sub: 'پیشنهاد، انتقاد یا تجربه‌ات را مستقیم با تیم ما در میان بگذار.', name: 'نام شما', email: 'ایمیل شما', message: 'پیام شما', send: 'ارسال پیام', sending: 'در حال ارسال...', success: 'پیامت با موفقیت برای تیم ROSA ارسال شد. ممنونیم!', error: 'ارسال پیام انجام نشد. لطفاً کمی بعد دوباره تلاش کن.' },
-    en: { title: 'Your voice matters to ROSA', sub: 'Share your feedback, ideas, or experience with our team.', name: 'Your name', email: 'Your email', message: 'Your message', send: 'Send message', sending: 'Sending...', success: 'Your message was sent to the ROSA team. Thank you!', error: 'Could not send your message. Please try again later.' },
-    ar: { title: 'رأيك يهم ROSA', sub: 'شاركنا اقتراحاتك أو ملاحظاتك أو تجربتك.', name: 'اسمك', email: 'بريدك الإلكتروني', message: 'رسالتك', send: 'إرسال الرسالة', sending: 'جارٍ الإرسال...', success: 'تم إرسال رسالتك إلى فريق ROSA. شكراً لك!', error: 'تعذر إرسال رسالتك. يرجى المحاولة لاحقاً.' },
+    fa: { title: 'صدای شما برای ROSA', sub: 'پیشنهاد، انتقاد یا تجربه‌ات را مستقیم با تیم ما در میان بگذار.', name: 'نام شما', email: 'ایمیل شما', message: 'پیام شما', send: 'ارسال پیام', sending: 'در حال ارسال...', success: 'پیامت با موفقیت ثبت شد. ممنونیم!', error: 'ارسال پیام انجام نشد. لطفاً کمی بعد دوباره تلاش کن.' },
+    en: { title: 'Your voice matters to ROSA', sub: 'Share your feedback, ideas, or experience with our team.', name: 'Your name', email: 'Your email', message: 'Your message', send: 'Send message', sending: 'Sending...', success: 'Your message was received. Thank you!', error: 'Could not send your message. Please try again later.' },
+    ar: { title: 'رأيك يهم ROSA', sub: 'شاركنا اقتراحاتك أو ملاحظاتك أو تجربتك.', name: 'اسمك', email: 'بريدك الإلكتروني', message: 'رسالتك', send: 'إرسال الرسالة', sending: 'جارٍ الإرسال...', success: 'تم استلام رسالتك. شكراً لك!', error: 'تعذر إرسال رسالتك. يرجى المحاولة لاحقاً.' },
   }[lang]
 
   async function submit(event: FormEvent) {
@@ -27,14 +27,24 @@ export default function SiteFeedback() {
       return
     }
     setSending(true)
-    const { error } = await supabase.functions.invoke('site-feedback', {
-      body: { name: name.trim(), email: email.trim(), message: message.trim(), website },
-    })
-    setSending(false)
-    if (error) {
-      console.error('[rosa] site feedback failed:', error.message)
+    try {
+      const { error } = await supabase.from('site_feedback').insert({
+        name: name.trim(),
+        email: email.trim(),
+        message: message.trim(),
+        status: 'new',
+      })
+      if (error) {
+        console.error('[rosa] site feedback failed:', error.message)
+        setStatus('error')
+        return
+      }
+    } catch (error) {
+      console.error('[rosa] site feedback failed:', error)
       setStatus('error')
       return
+    } finally {
+      setSending(false)
     }
     setName('')
     setEmail('')
