@@ -126,7 +126,7 @@ export default function Checkout() {
         productSnapshot: {
           productId: item.productId,
           title: product?.translations ?? {},
-          brand: product?.brand ?? "",
+          brand: product?.brandName ?? "",
           category: product?.category ?? "",
           images: product?.images ?? [],
           variantId: item.variantId,
