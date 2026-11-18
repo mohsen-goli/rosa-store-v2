@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 import { useI18n } from "../i18n";
 import { useCatalog } from "../CatalogContext";
+import { useCart } from "../CartContext";
+import { useStore } from "../store";
 import type { CatalogProduct, Lang } from "../types/catalog";
 
 type Props = {
@@ -26,15 +28,22 @@ function formatAmount(amount: number, lang: Lang) {
 export default function CatalogProductCard({ product }: Props) {
   const { lang, t } = useI18n();
   const { market } = useCatalog();
+  const { addItem } = useCart();
+  const { toast } = useStore();
 
-  const variant = product.variants[0];
+  const variant =
+    product.variants.find(
+      (item) =>
+        item.isActive &&
+        item.prices.some((price) => price.market === market),
+    ) ?? product.variants[0];
 
   const price = variant?.prices.find((item) => item.market === market);
 
   const discount = variant?.discountPercent ?? 0;
   const finalPrice = price ? price.amount * (1 - discount / 100) : null;
 
-  const outOfStock = !variant || variant.stock <= 0;
+  const outOfStock = !variant || !variant.isActive || variant.stock <= 0;
   const image = product.images[0];
   const translation = product.translations[lang];
 
@@ -50,6 +59,26 @@ export default function CatalogProductCard({ product }: Props) {
   const badgeLabel = product.badge
     ? badgeLabels[product.badge]?.[lang]
     : undefined;
+
+  const handleAddToCart = () => {
+    if (!variant || !price || outOfStock) return;
+
+    const added = addItem(product.id, variant.id, 1);
+
+    if (added) {
+      toast("added");
+      return;
+    }
+
+    toast(
+      lang === "fa"
+        ? "افزودن محصول ممکن نیست؛ موجودی یا قیمت را بررسی کنید."
+        : lang === "ar"
+          ? "تعذرت إضافة المنتج. تحقق من المخزون والسعر."
+          : "Could not add product. Check stock and price.",
+      "error",
+    );
+  };
 
   return (
     <article className="group relative bg-white rounded-2xl border border-ink-100 hover:border-brand-200 hover:shadow-xl hover:shadow-brand-100/40 transition-all overflow-hidden flex flex-col min-w-52.5 w-52.5">
@@ -126,13 +155,16 @@ export default function CatalogProductCard({ product }: Props) {
             )}
           </div>
 
-          <Link
-            to={`/product/${product.id}`}
-            aria-label={t("action.viewProduct")}
-            className="w-9 h-9 shrink-0 rounded-full bg-brand-500 hover:bg-brand-600 text-white grid place-items-center transition"
+          <button
+            type="button"
+            disabled={outOfStock || !price}
+            onClick={handleAddToCart}
+            aria-label={t("action.addCart")}
+            title={t("action.addCart")}
+            className="w-9 h-9 shrink-0 rounded-full bg-brand-500 hover:bg-brand-600 disabled:bg-ink-300 text-white grid place-items-center transition"
           >
             <ShoppingBag className="w-4 h-4" />
-          </Link>
+          </button>
         </div>
 
         {outOfStock && (

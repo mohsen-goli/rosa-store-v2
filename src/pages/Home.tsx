@@ -7,6 +7,7 @@ import BrandStory from '../components/BrandStory'
 import BrandsMarquee from '../components/BrandsMarquee'
 import Articles from '../components/Articles'
 import Newsletter from '../components/Newsletter'
+import SiteFeedback from '../components/SiteFeedback'
 
 import { useI18n } from '../i18n'
 import { useCatalog } from '../CatalogContext'
@@ -115,6 +116,7 @@ export default function Home() {
       <BrandsMarquee />
       <Articles />
       <Newsletter />
+      <SiteFeedback />
     </>
   )
 }
