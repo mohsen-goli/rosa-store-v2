@@ -1,7 +1,8 @@
 -- ROSA 2 product reviews
+-- products.id is TEXT in the live ROSA 2 database.
 create table if not exists public.product_reviews (
   id uuid primary key default gen_random_uuid(),
-  product_id uuid not null references public.products(id) on delete cascade,
+  product_id text not null references public.products(id) on delete cascade,
   user_id uuid not null references auth.users(id) on delete cascade,
   display_name text not null,
   rating smallint not null check (rating between 1 and 5),
