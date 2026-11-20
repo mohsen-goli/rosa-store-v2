@@ -5,42 +5,86 @@ import { supabase, hasSupabase } from './supabase'
 import { products as fallbackProducts, type Product, type Category } from '../data'
 import type { Order } from '../store'
 
-type DbProductRow = {
+type LegacyCatalogRow = {
   id: string
-  title_fa: string; title_en: string; title_ar: string
-  brand: string; category: Category
-  price: number; discount: number | null; rating: number | null
-  stock: number; images: string[] | null
+  category: Category
   badge: Product['badge'] | null
-  active: boolean
+  rating: number | null
   created_at: string
+  brands: { name: string } | null
+  product_translations: { lang: 'fa' | 'en' | 'ar'; title: string }[]
+  product_variants: {
+    price_irr: number
+    discount_percent: number | null
+    stock: number
+    is_active: boolean
+    sort_order: number
+  }[]
+  product_images: {
+    image_url: string
+    is_primary: boolean
+    sort_order: number
+  }[]
 }
 
-function mapRow(r: DbProductRow): Product {
+function mapLegacyCatalogRow(row: LegacyCatalogRow): Product {
+  const variant = [...(row.product_variants ?? [])]
+    .filter(item => item.is_active)
+    .sort((a, b) => a.sort_order - b.sort_order)[0]
+  const translations = Object.fromEntries(
+    (['fa', 'en', 'ar'] as const).map(lang => [
+      lang,
+      row.product_translations.find(item => item.lang === lang)?.title ?? '',
+    ]),
+  ) as Product['title']
+  const images = [...(row.product_images ?? [])]
+    .sort((a, b) => {
+      if (a.is_primary !== b.is_primary) return a.is_primary ? -1 : 1
+      return a.sort_order - b.sort_order
+    })
+    .map(image => image.image_url)
+
   return {
-    id: r.id,
-    title: { fa: r.title_fa, en: r.title_en, ar: r.title_ar },
-    brand: r.brand,
-    category: r.category,
-    price: r.price,
-    discount: r.discount ?? undefined,
-    rating: Number(r.rating ?? 4.5),
-    stock: r.stock,
-    images: (r.images && r.images.length > 0) ? r.images : ['https://images.unsplash.com/photo-1522335789203-aaa0bdf829ab?auto=format&fit=crop&w=800&q=70'],
-    badge: r.badge ?? undefined,
+    id: row.id,
+    title: translations,
+    brand: row.brands?.name ?? '',
+    category: row.category,
+    price: Number(variant?.price_irr ?? 0),
+    discount: Number(variant?.discount_percent ?? 0) || undefined,
+    rating: Number(row.rating ?? 0),
+    stock: Number(variant?.stock ?? 0),
+    images: images.length
+      ? images
+      : ['https://images.unsplash.com/photo-1522335789203-aaa0bdf829ab?auto=format&fit=crop&w=800&q=70'],
+    badge: row.badge ?? undefined,
   }
 }
 
 export async function fetchProducts(): Promise<Product[]> {
   if (!hasSupabase || !supabase) return fallbackProducts
+
   const { data, error } = await supabase
     .from('products')
-    .select('*')
-    .eq('active', true)
+    .select(`
+      id,
+      category,
+      badge,
+      rating,
+      created_at,
+      brands(name),
+      product_translations(lang, title),
+      product_variants(price_irr, discount_percent, stock, is_active, sort_order),
+      product_images(image_url, is_primary, sort_order)
+    `)
+    .eq('is_active', true)
     .order('created_at', { ascending: false })
-  if (error) { console.warn('[rosa] products fetch failed, using fallback:', error.message); return fallbackProducts }
+
+  if (error) {
+    console.warn('[rosa] products fetch failed, using fallback:', error.message)
+    return fallbackProducts
+  }
   if (!data || data.length === 0) return fallbackProducts
-  return data.map(mapRow as (r: unknown) => Product)
+  return (data as unknown as LegacyCatalogRow[]).map(mapLegacyCatalogRow)
 }
 
 // Realtime: call the given callback whenever any product row changes.
