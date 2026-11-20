@@ -234,7 +234,7 @@ export async function removeWish(productId: string) {
 export async function subscribeNewsletter(email: string, lang: string) {
   if (!hasSupabase || !supabase) return { ok: true, local: true }
   const normalizedEmail = email.trim().toLowerCase()
-  if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(normalizedEmail)) throw new Error('invalid_email')
+  if (!/^[^@ ]+@[^@ ]+[.][^@ ]+$/.test(normalizedEmail)) throw new Error('invalid_email')
   if (!['fa', 'en', 'ar'].includes(lang)) throw new Error('invalid_language')
   const { error } = await supabase.from('newsletter_subscribers').insert({ email: normalizedEmail, lang })
   if (error && error.code !== '23505') throw error
