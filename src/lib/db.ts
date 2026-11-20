@@ -122,67 +122,61 @@ export async function authSignOut() {
 
 // -------------------- ORDERS --------------------
 export type DbOrderInput = {
-  code: string
-  subtotal: number
-  shipping: number
-  total: number
+  code?: string
+  subtotal?: number
+  shipping?: number
+  total?: number
   customer: Order['customer'] & { market?: 'iran' | 'international'; currency?: 'IRR' | 'USD' }
   items: {
-    productId: string
+    productId?: string
+    variantId?: string
     qty: number
-    price: number
-    productSnapshot: Record<string, unknown>
+    price?: number
+    productSnapshot?: Record<string, unknown>
   }[]
 }
 
+/**
+ * Order prices, discounts, shipping and snapshots are calculated by the
+ * database function. Values supplied by the browser are intentionally ignored.
+ */
 export async function createOrder(input: DbOrderInput): Promise<string> {
   if (!hasSupabase || !supabase) throw new Error('supabase_not_configured')
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('auth_required')
 
-  // The database stores order money as integer minor units.
-  // IRR uses whole rials; USD is stored as cents to preserve decimals.
-  const minorUnit = input.customer.currency === 'USD' ? 100 : 1
-  const { data: order, error: orderErr } = await supabase
-    .from('orders')
-    .insert({
-      user_id:  user.id,
-      code:     input.code,
-      subtotal: Math.round(input.subtotal * minorUnit),
-      shipping: Math.round(input.shipping * minorUnit),
-      total:    Math.round(input.total * minorUnit),
-      market:   input.customer.market ?? 'iran',
-      currency: input.customer.currency ?? 'IRR',
-      customer: input.customer,
-      status:   'pending',
-    })
-    .select('id')
-    .single()
-  if (orderErr || !order) {
-    const reason = orderErr
-      ? [orderErr.message, orderErr.details, orderErr.hint, orderErr.code].filter(Boolean).join(' | ')
-      : 'Supabase returned no order row'
-    throw new Error(`orders insert failed: ${reason}`)
+  const { data: { user }, error: userError } = await supabase.auth.getUser()
+  if (userError || !user) throw new Error('auth_required')
+
+  const items = input.items.map((item) => {
+    if (!item.variantId) {
+      throw new Error('A valid product variant is required to place this order')
+    }
+    if (!Number.isInteger(item.qty) || item.qty < 1) {
+      throw new Error('Invalid product quantity')
+    }
+    return { variantId: item.variantId, qty: item.qty }
+  })
+
+  const { data, error } = await supabase.rpc('create_order_secure', {
+    p_market: input.customer.market ?? 'iran',
+    p_customer: {
+      name: input.customer.name,
+      phone: input.customer.phone,
+      email: input.customer.email ?? null,
+      city: input.customer.city,
+      address: input.customer.address,
+      postal: input.customer.postal ?? null,
+      note: input.customer.note ?? null,
+    },
+    p_items: items,
+  })
+
+  if (error) {
+    throw new Error(`Secure order creation failed: ${error.message}`)
   }
-
-  const { error: itemsErr } = await supabase.from('order_items').insert(
-    input.items.map(i => ({
-      order_id: order.id,
-      product_id: i.productId,
-      product_snapshot: i.productSnapshot,
-      quantity: i.qty,
-      unit_price: Math.round(i.price * minorUnit),
-      line_total: Math.round(i.price * i.qty * minorUnit),
-    }))
-  )
-  if (itemsErr) {
-    const reason = [itemsErr.message, itemsErr.details, itemsErr.hint, itemsErr.code]
-      .filter(Boolean)
-      .join(' | ')
-    throw new Error(`order_items insert failed: ${reason}`)
+  if (typeof data !== 'string' || !data) {
+    throw new Error('The order service returned an invalid confirmation')
   }
-
-  return order.id
+  return data
 }
 
 export async function fetchMyOrders(): Promise<Order[]> {
