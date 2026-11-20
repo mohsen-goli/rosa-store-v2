@@ -118,27 +118,14 @@ export default function Checkout() {
 
     setSubmitting(true);
     try {
-      const code = "ROS-" + Math.random().toString(36).slice(2, 8).toUpperCase();
-      const orderItems = cartLines.map(({ item, product, variant, unitPrice }) => ({
-        productId: item.productId,
+      // The browser sends only variant IDs and quantities. The database
+      // recalculates prices, discounts, shipping and snapshots authoritatively.
+      const orderItems = cartLines.map(({ item }) => ({
+        variantId: item.variantId,
         qty: item.qty,
-        price: Math.round((unitPrice ?? 0) * 100) / 100,
-        productSnapshot: {
-          productId: item.productId,
-          title: product?.translations ?? {},
-          brand: product?.brandName ?? "",
-          category: product?.category ?? "",
-          images: product?.images ?? [],
-          variantId: item.variantId,
-          variant: variant ?? null,
-        },
       }));
 
-      const orderId = await createOrder({
-        code,
-        subtotal,
-        shipping,
-        total,
+      const orderCode = await createOrder({
         customer: {
           ...form,
           market,
@@ -148,7 +135,7 @@ export default function Checkout() {
       });
 
       clearMarketCart();
-      setDone(orderId);
+      setDone(orderCode);
     } catch (error) {
       console.error("[ROSA checkout] order submission failed:", error);
       const details =
