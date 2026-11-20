@@ -52,7 +52,7 @@ for insert to anon, authenticated
 with check (
   email = btrim(email)
   and char_length(email) between 3 and 254
-  and email ~ '^[^[:space:]@]+@[^[:space:]@]+\\.[^[:space:]@]+$'
+  and email ~ '^[^[:space:]@]+@[^[:space:]@]+[.][^[:space:]@]+$'
   and lang in ('fa', 'en', 'ar')
   and (market is null or market in ('iran', 'international'))
 );
