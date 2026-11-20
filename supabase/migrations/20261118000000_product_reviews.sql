@@ -35,4 +35,37 @@ create policy "authenticated_users_create_pending_reviews"
     and length(trim(body)) between 10 and 2000
   );
 
+-- Admins can review every submission and moderate its status.
+drop policy if exists "admins_can_read_product_reviews" on public.product_reviews;
+create policy "admins_can_read_product_reviews"
+  on public.product_reviews for select
+  to authenticated
+  using (
+    exists (
+      select 1 from public.profiles
+      where profiles.id = auth.uid()
+        and profiles.role = 'admin'
+    )
+  );
+
+drop policy if exists "admins_can_moderate_product_reviews" on public.product_reviews;
+create policy "admins_can_moderate_product_reviews"
+  on public.product_reviews for update
+  to authenticated
+  using (
+    exists (
+      select 1 from public.profiles
+      where profiles.id = auth.uid()
+        and profiles.role = 'admin'
+    )
+  )
+  with check (
+    exists (
+      select 1 from public.profiles
+      where profiles.id = auth.uid()
+        and profiles.role = 'admin'
+    )
+    and status in ('pending', 'approved', 'rejected')
+  );
+
 -- No public update/delete policy: customers cannot approve or edit reviews.
